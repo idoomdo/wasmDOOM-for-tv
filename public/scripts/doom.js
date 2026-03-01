@@ -97,3 +97,35 @@ document.addEventListener("fullscreenchange", () => {
 });
 
 
+// --- SAMSUNG TV REMOTE TO DOOM MAPPER ---
+window.addEventListener("keydown", function(e) {
+    const remoteToDoom = {
+        38: 38,    // Remote Up    -> Doom Move Forward (Up Arrow)
+        40: 40,    // Remote Down  -> Doom Move Backward (Down Arrow)
+        37: 37,    // Remote Left  -> Doom Turn Left (Left Arrow)
+        39: 39,    // Remote Right -> Doom Turn Right (Right Arrow)
+        13: 17,    // Remote OK    -> Doom Fire (Ctrl)
+        10252: 32, // Remote Play  -> Doom Open Door (Space)
+        10009: 27, // Remote Back  -> Doom Menu (Esc)
+        427: 16,   // Channel Up   -> Doom Run (Shift)
+        428: 69    // Channel Down -> Doom Use (E)
+    };
+
+    if (remoteToDoom[e.keyCode]) {
+        // Create a fake keyboard event for the Doom engine to "hear"
+        const doomKey = remoteToDoom[e.keyCode];
+        const event = new KeyboardEvent('keydown', {
+            view: window,
+            bubbles: true,
+            cancelable: true,
+            keyCode: doomKey,
+            which: doomKey
+        });
+        window.dispatchEvent(event);
+        
+        // Prevent the TV browser from closing the app when pressing "Back"
+        if(e.keyCode === 10009) e.preventDefault();
+    }
+});
+
+
